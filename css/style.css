@@ -10,3 +10,9 @@
   margin-bottom: 10px;
   color: #ff1010;
 }
+
+.cardsContainer{
+  max-width: 400px;
+  max-height: 400px;
+  margin: 0 auto;
+}
