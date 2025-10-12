@@ -1,0 +1,12 @@
+.pageBackground {
+  background-color: rgb(255, 255, 255);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+#LaRedouteTitulo{
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #ff1010;
+}
