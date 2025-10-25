@@ -1,5 +1,6 @@
 import * as THREE from 'https://unpkg.com/three@0.158.0/build/three.module.js';
-import { cena, camera, renderer, windowProduct, partes } from './loadBlenderModel.js';
+import { cena, camera, renderer, windowProduct, partes, animacoes } from './loadBlenderModel.js';
+import { playAnimation } from './animacoes.js';
 
 let raycaster = new THREE.Raycaster();
 let rato = new THREE.Vector2();
@@ -11,6 +12,7 @@ function getFirstObjHit(candidatos) {
     if (intersetados.length > 0) {
         let intersetado = intersetados[0];
         console.log(intersetado.object.name);
+        playAnimation("Fechar Dust Cover");
         
     }
 }
