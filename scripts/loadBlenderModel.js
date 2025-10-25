@@ -95,13 +95,15 @@ async function carregarModelo(glbPath) {
     cena.add(gltf.scene);
 
     gltf.scene.traverse(function (obj) {
-      if (obj.isMesh) {
+      //if(obj.isMesh){console.log(obj.name);}
+      if (obj.isMesh && (obj.name == "Base" || obj.name == "DustCover" || obj.name == "VinylDisk" )) {
+        partes.push(obj);
         }
       
     });
 
     
-    return gltf; // in case you want to use it later
+    return gltf; 
 
   } catch (erro) {
     console.error('Erro ao carregar modelo:', erro);
@@ -120,3 +122,5 @@ function desenhar() {
 
 
 desenhar();
+
+export {cena, camera, renderer, windowProduct, partes};
