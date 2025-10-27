@@ -66,8 +66,6 @@ const RENDERER_HEIGHT = windowProduct.getBoundingClientRect().height;
 renderer.setSize(RENDER_WIDTH,RENDERER_HEIGHT);
 windowProduct.appendChild(renderer.domElement);
 
-const clock = new THREE.Clock(); 
-
 
 //Criar controlos para mover a camera
 let controlo = new OrbitControls(camera, windowProduct);
@@ -79,11 +77,18 @@ function getTargetWindow(id){
 }
 
 //Array que vai guardar partes do modelo
-
 let partes = []
 
-//Carregar modelo
+//Nomes de animações a procurar
+const ANIMATIONS_TO_FIND = ["Fechar Dust Cover", "Abrir DustCover"];
 
+//hashmap para animações
+let animacoes = new Map();
+
+// mixer para animações
+let misturador; 
+
+//Carregar modelo
 
 const CAMINHO_MODELO = '../modelos/RecordPlayer.glb' 
 
@@ -94,14 +99,40 @@ async function carregarModelo(glbPath) {
     const gltf = await loader.loadAsync(glbPath);
     cena.add(gltf.scene);
 
+    misturador = new THREE.AnimationMixer(gltf.scene);
+
+    gltf.animations.forEach((clip) => {
+      console.log('Animação encontrada:', clip.name);
+    });
+
+    //Colocar animacoes num hashmap
+    if (gltf.animations && gltf.animations.length > 0){
+      
+      //procurar cada animação pelo nome
+      ANIMATIONS_TO_FIND.forEach((nomeAnimacao) => {
+        
+        const a = THREE.AnimationClip.findByName(gltf.animations, nomeAnimacao);
+
+        if(a){
+          animacoes.set(nomeAnimacao, a);
+        }
+          else{
+            console.warn(`Animação ${nomeAnimacao} não encontrada no modelo.`);
+          }
+      })
+
+    }
+
     gltf.scene.traverse(function (obj) {
-      if (obj.isMesh) {
+      //if(obj.isMesh){console.log(obj.name);}
+      if (obj.isMesh && (obj.name == "Base" || obj.name == "DustCover" || obj.name == "VinylDisk" )) {
+        partes.push(obj);
         }
       
     });
 
     
-    return gltf; // in case you want to use it later
+    return gltf; 
 
   } catch (erro) {
     console.error('Erro ao carregar modelo:', erro);
@@ -117,6 +148,6 @@ function desenhar() {
   renderer.render(cena, camera);
 }
 
-
-
 desenhar();
+
+export {cena, camera, renderer, windowProduct, partes, misturador, animacoes, controlo};
